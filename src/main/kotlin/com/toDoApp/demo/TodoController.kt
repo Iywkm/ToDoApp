@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ToDoController(val todoService: TodoService) {
+class TodoController(val todoService: TodoResource) {
     @PostMapping("/todo")
-    fun createTodoItem(@RequestBody name: String) {
-        todoService.createTodoItem(TodoItem(name))
+    fun createTodoItem(@RequestBody item: TodoItem) {
+        todoService.createTodoItem(item)
     }
 }
 
