@@ -9,4 +9,8 @@ class DBTodoItemRepository: TodoItemRepository {
     override fun saveTodoItem(todoItem: TodoItem) {
         todoList.add(todoItem)
     }
+
+    override fun getTodoItems(): List<TodoItem> {
+        return todoList
+    }
 }

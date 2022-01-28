@@ -20,6 +20,33 @@ class TodoServiceTest {
         ))
 
     }
+
+    @Test
+    fun `getTodoItems will get todo items`() {
+        val stubRepo = StubRepository()
+        val service = TodoService(stubRepo)
+
+        val result = service.getTodoItems()
+
+        assertThat(result[0].name, equalTo("shopping"))
+        assertThat(result[1].name, equalTo("karaoke"))
+    }
+}
+
+class StubRepository : TodoItemRepository {
+    val getTodoItems_return_value = listOf<TodoItem>(
+        TodoItem("shopping"),
+        TodoItem("karaoke")
+    )
+
+    override fun saveTodoItem(todoItem: TodoItem) {
+
+    }
+
+    override fun getTodoItems(): List<TodoItem> {
+        return getTodoItems_return_value
+    }
+
 }
 
 class SpyTodoRepository : TodoItemRepository {
@@ -29,5 +56,9 @@ class SpyTodoRepository : TodoItemRepository {
     override fun saveTodoItem(todoItem: TodoItem) {
         saveTodoItem_todoItem = todoItem
         saveTodoItem_was_called = true
+    }
+
+    override fun getTodoItems(): List<TodoItem> {
+        return emptyList()
     }
 }
