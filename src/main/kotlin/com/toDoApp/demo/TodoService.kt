@@ -11,9 +11,14 @@ class TodoService(val todoRepository: TodoItemRepository): TodoResource {
     override fun getTodoItems(): List<TodoItem> {
         return todoRepository.getTodoItems()
     }
+
+    override fun getDoneItems(): List<TodoItem> {
+       return todoRepository.getDoneItems()
+    }
 }
 
 interface TodoResource {
     fun createTodoItem(todoItem: TodoItem)
     fun getTodoItems(): List<TodoItem>
+    fun getDoneItems(): List<TodoItem>
 }

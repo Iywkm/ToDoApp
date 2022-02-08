@@ -16,6 +16,11 @@ class TodoController(val todoService: TodoResource) {
     fun getTodoItems(): List<TodoItem> {
         return todoService.getTodoItems()
     }
+
+    @GetMapping("/complete")
+    fun getDoneItems(): List<TodoItem> {
+        return todoService.getDoneItems()
+    }
 }
 
-data class TodoItem (val name: String)
+data class TodoItem (val name: String, val done: Boolean = false)

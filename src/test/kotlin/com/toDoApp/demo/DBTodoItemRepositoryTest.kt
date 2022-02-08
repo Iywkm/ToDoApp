@@ -19,7 +19,7 @@ class DBTodoItemRepositoryTest {
         repo.saveTodoItem(TodoItem("running"))
         repo.saveTodoItem(TodoItem("go to konbini"))
 
-        assertThat(repo.todoList.toList(), equalTo(
+        assertThat(dBTodoItemsList, equalTo(
                 listOf(TodoItem("running"), TodoItem("go to konbini"))
         ))
     }

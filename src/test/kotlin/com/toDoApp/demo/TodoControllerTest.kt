@@ -44,16 +44,34 @@ class TodoControllerTest {
     @Test
     fun `getTodoItems will return todo item list and status 200`() {
         setupWithStubService()
+        stubService.getTodoItems_return_value = listOf<TodoItem>(
+            TodoItem("shopping"),
+            TodoItem("karaoke")
+        )
 
         mockMvc.perform(
             get("/todo")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].name", equalTo("shopping")))
             .andExpect(jsonPath("$[1].name", equalTo("karaoke")))
 
     }
+
+    @Test
+    fun `getDoneItems will return done item list and status 200`() {
+        setupWithStubService()
+        stubService.getDoneItems_return_value = listOf(TodoItem("running", true))
+
+        mockMvc.perform(
+            get("/complete").contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].name", equalTo("running")))
+            .andExpect(jsonPath("$[0].done", equalTo(true)))
+    }
+
 
 
 }
@@ -70,13 +88,15 @@ class SpyService : TodoResource {
     override fun getTodoItems(): List<TodoItem> {
         return emptyList()
     }
+
+    override fun getDoneItems(): List<TodoItem> {
+        return emptyList()
+    }
 }
 
 class StubService : TodoResource {
-    val getTodoItems_return_value = listOf<TodoItem>(
-        TodoItem("shopping"),
-        TodoItem("karaoke")
-    )
+    var getTodoItems_return_value: List<TodoItem> = emptyList()
+    var getDoneItems_return_value: List<TodoItem> = emptyList()
 
     override fun createTodoItem(todoItem: TodoItem) {
 
@@ -84,5 +104,9 @@ class StubService : TodoResource {
 
     override fun getTodoItems(): List<TodoItem> {
         return getTodoItems_return_value
+    }
+
+    override fun getDoneItems(): List<TodoItem> {
+        return getDoneItems_return_value
     }
 }
