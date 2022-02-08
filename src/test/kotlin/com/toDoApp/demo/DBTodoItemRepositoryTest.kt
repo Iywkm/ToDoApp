@@ -35,7 +35,6 @@ class DBTodoItemRepositoryTest {
         repo.saveTodoItem(TodoItem("running"))
         repo.saveTodoItem(TodoItem("go to konbini"))
 
-        // testDBのデータをselectで取ってくる
         val sql = "select * from todo"
         val dBTodoItemsList: List<TodoItem> = jdbcTemplate.query(sql, rowMapper)
 
@@ -54,4 +53,15 @@ class DBTodoItemRepositoryTest {
         assertThat(result, equalTo(listOf(TodoItem("shopping", true))))
 
     }
+
+    @Test
+    fun `getDoneItem will get done items`() {
+        val sql = "insert into todo(name, done) values(?,?)"
+        jdbcTemplate.update(sql, "shopping", true)
+        jdbcTemplate.update(sql, "wake up 7 am", false)
+        
+        val result = repo.getDoneItems()
+        assertThat(result, equalTo(listOf(TodoItem("shopping" , true))))
+    }
+
 }

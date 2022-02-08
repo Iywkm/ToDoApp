@@ -24,6 +24,7 @@ class DBTodoItemRepository(val jdbcTemplate: JdbcTemplate): TodoItemRepository {
     }
 
     override fun getDoneItems(): List<TodoItem> {
-        TODO("Not yet implemented")
+        val sql = "select * from todo where done = true"
+        return jdbcTemplate.query(sql, rowMapper)
     }
 }
