@@ -45,13 +45,11 @@ class DBTodoItemRepositoryTest {
 
     @Test
     fun `getTodoItem will get todo items`() {
-        // testDBにinsertする
         val sql = "insert into todo(name, done) values(?,?)"
         jdbcTemplate.update(sql, "shopping", true)
 
         val result = repo.getTodoItems()
         assertThat(result, equalTo(listOf(TodoItem("shopping", true))))
-
     }
 
     @Test
