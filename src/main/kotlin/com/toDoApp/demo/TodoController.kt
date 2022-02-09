@@ -1,5 +1,6 @@
 package com.toDoApp.demo
 
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,6 +21,11 @@ class TodoController(val todoService: TodoResource) {
     @GetMapping("/complete")
     fun getDoneItems(): List<TodoItem> {
         return todoService.getDoneItems()
+    }
+
+    @DeleteMapping("/complete")
+    fun deleteDoneItems() {
+        todoService.deleteDoneItems()
     }
 }
 

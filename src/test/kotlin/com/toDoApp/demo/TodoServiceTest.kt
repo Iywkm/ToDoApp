@@ -48,6 +48,15 @@ class TodoServiceTest {
         assertThat(result[0].name, equalTo("running"))
         assertThat(result[0].done, equalTo(true))
     }
+
+    @Test
+    fun `deleteDoneItems will delete done items`() {
+        val spyRepo = SpyTodoRepository()
+        val service = TodoService(spyRepo)
+        service.deleteDoneItems()
+        assertThat(spyRepo.deleteDoneItem_was_called, equalTo(true))
+    }
+
 }
 
 class StubRepository : TodoItemRepository {
@@ -65,11 +74,15 @@ class StubRepository : TodoItemRepository {
         return getDoneItems_return_value
     }
 
+    override fun deleteDoneItems() {
+    }
+
 }
 
 class SpyTodoRepository : TodoItemRepository {
     var saveTodoItem_todoItem: TodoItem = TodoItem("")
     var saveTodoItem_was_called = false
+    var deleteDoneItem_was_called = false
 
     override fun saveTodoItem(todoItem: TodoItem) {
         saveTodoItem_todoItem = todoItem
@@ -82,5 +95,9 @@ class SpyTodoRepository : TodoItemRepository {
 
     override fun getDoneItems(): List<TodoItem> {
         TODO("Not yet implemented")
+    }
+
+    override fun deleteDoneItems() {
+        deleteDoneItem_was_called = true
     }
 }

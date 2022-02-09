@@ -6,4 +6,6 @@ interface TodoItemRepository {
     fun getTodoItems(): List<TodoItem>
 
     fun getDoneItems(): List<TodoItem>
+
+    fun deleteDoneItems()
 }

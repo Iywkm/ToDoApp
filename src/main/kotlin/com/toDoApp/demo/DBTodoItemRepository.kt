@@ -27,4 +27,9 @@ class DBTodoItemRepository(val jdbcTemplate: JdbcTemplate): TodoItemRepository {
         val sql = "select * from todo where done = true"
         return jdbcTemplate.query(sql, rowMapper)
     }
+
+    override fun deleteDoneItems() {
+        val sql = "delete from todo where done = true"
+        jdbcTemplate.update(sql)
+    }
 }
