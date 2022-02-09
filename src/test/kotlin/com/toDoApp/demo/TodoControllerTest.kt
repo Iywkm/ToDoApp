@@ -72,13 +72,24 @@ class TodoControllerTest {
             .andExpect(jsonPath("$[0].done", equalTo(true)))
     }
 
+    @Test
+    fun `deleteDoneItems succeeds and returns status 200`() {
+        setupWithSpyService()
 
+        mockMvc.perform(
+            delete("/complete")
+        )
+            .andExpect(status().isOk)
+
+        assertThat(spyService.deleteTodoItems_was_called, equalTo(true))
+    }
 
 }
 
 class SpyService : TodoResource {
     var createTodoItem_todoItem: TodoItem = TodoItem("")
     var createTodoItem_was_called = false
+    var deleteTodoItems_was_called = false
 
     override fun createTodoItem(todoItem: TodoItem) {
         createTodoItem_todoItem = todoItem
@@ -91,6 +102,10 @@ class SpyService : TodoResource {
 
     override fun getDoneItems(): List<TodoItem> {
         return emptyList()
+    }
+
+    override fun deleteDoneItems() {
+        deleteTodoItems_was_called = true
     }
 }
 
@@ -108,5 +123,9 @@ class StubService : TodoResource {
 
     override fun getDoneItems(): List<TodoItem> {
         return getDoneItems_return_value
+    }
+
+    override fun deleteDoneItems() {
+
     }
 }

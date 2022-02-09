@@ -62,4 +62,19 @@ class DBTodoItemRepositoryTest {
         assertThat(result, equalTo(listOf(TodoItem("shopping" , true))))
     }
 
+    @Test
+    fun `deleteTodoItems will delete all done items`() {
+        var sql = "insert into todo(name, done) values(?,?)"
+        jdbcTemplate.update(sql, "shopping", true)
+        jdbcTemplate.update(sql, "wake up 7 am", false)
+
+        repo.deleteDoneItems()
+
+        sql = "select * from todo"
+        val dBTodoItemsList: List<TodoItem> = jdbcTemplate.query(sql, rowMapper)
+        assertThat(dBTodoItemsList[0].name, equalTo("wake up 7 am"))
+        assertThat(dBTodoItemsList.size, equalTo(1))
+
+    }
+
 }
