@@ -102,6 +102,24 @@ class TodoControllerTest {
         assertThat(spyService.updateTodoItem_param_done, equalTo(true))
     }
 
+    @Test
+    fun `getTodoItemById will return todo item selected by id and status 200`() {
+        setupWithStubService()
+        stubService.getTodoItemById_return_value = listOf(
+            TodoItem("shopping", false)
+        )
+        mockMvc.perform(
+            get("/todo")
+                .param("id","1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].name", equalTo("shopping")))
+            .andExpect(jsonPath("$[0].done", equalTo(false)))
+
+        assertThat(stubService.getTodoItemById_param_id, equalTo(1))
+    }
+
 }
 
 class SpyService : TodoResource {
@@ -137,11 +155,17 @@ class SpyService : TodoResource {
         updateTodoItem_was_called = true
 
     }
+
+    override fun getTodoItemById(id: Int): List<TodoItem> {
+        TODO("Not yet implemented")
+    }
 }
 
 class StubService : TodoResource {
     var getTodoItems_return_value: List<TodoItem> = emptyList()
     var getDoneItems_return_value: List<TodoItem> = emptyList()
+    var getTodoItemById_return_value: List<TodoItem> = emptyList()
+    var getTodoItemById_param_id: Int? = null
 
     override fun createTodoItem(todoItem: TodoItem) {
 
@@ -159,5 +183,10 @@ class StubService : TodoResource {
     }
 
     override fun updateTodoItem(id: Int, name: String, done: Boolean) {
+    }
+
+    override fun getTodoItemById(id: Int): List<TodoItem> {
+        getTodoItemById_param_id = id
+        return getTodoItemById_return_value
     }
 }

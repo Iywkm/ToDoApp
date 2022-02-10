@@ -92,4 +92,16 @@ class DBTodoItemRepositoryTest {
         assertThat(dBTodoItemsList[0].done, equalTo(true))
     }
 
+    @Test
+    fun `getTodoItemById will get todo item selected by id`() {
+        val sql = "insert into todo(name, done) values(?,?)"
+        jdbcTemplate.update(sql, "shopping", true)
+        jdbcTemplate.update(sql, "cycling", false)
+
+
+        val result = repo.getTodoItemById(2)
+
+        assertThat(result, equalTo(listOf(TodoItem("cycling", false))))
+    }
+
 }
