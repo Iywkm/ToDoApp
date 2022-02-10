@@ -37,4 +37,9 @@ class DBTodoItemRepository(val jdbcTemplate: JdbcTemplate): TodoItemRepository {
         val sql = "update todo set name = ? , done = ? where id = ?"
         jdbcTemplate.update(sql, name, done, id)
     }
+
+    override fun getTodoItemById(id: Int): List<TodoItem> {
+        val sql = "select * from todo where id = ?"
+        return jdbcTemplate.query(sql, rowMapper, id)
+    }
 }

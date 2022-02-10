@@ -10,8 +10,13 @@ class TodoController(val todoService: TodoResource) {
     }
 
     @GetMapping("/todo")
-    fun getTodoItems(): List<TodoItem> {
-        return todoService.getTodoItems()
+    fun getTodoItems(@RequestParam id: String?): List<TodoItem> {
+        if (id == null) {
+            return todoService.getTodoItems()
+        } else {
+            return todoService.getTodoItemById(id.toInt())
+        }
+
     }
 
     @GetMapping("/complete")
@@ -28,6 +33,7 @@ class TodoController(val todoService: TodoResource) {
     fun updateTodoItem(@RequestParam id: String, name: String, done: String) {
         todoService.updateTodoItem(id.toInt(), name, done.toBoolean())
     }
+
 }
 
 data class TodoItem (val name: String, val done: Boolean = false)

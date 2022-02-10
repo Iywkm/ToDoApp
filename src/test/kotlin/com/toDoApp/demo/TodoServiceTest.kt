@@ -68,11 +68,25 @@ class TodoServiceTest {
         assertThat(spyRepo.updateTodoItem_param_done, equalTo(false))
     }
 
+    @Test
+    fun `getTodoItemById will get an item by ID`() {
+        val stubRepo = StubRepository()
+        val service = TodoService(stubRepo)
+        stubRepo.getTodoItemById_return_value = listOf<TodoItem>(
+            TodoItem("shopping")
+        )
+
+        val result = service.getTodoItemById(1)
+
+        assertThat(result[0].name, equalTo("shopping"))
+    }
+
 }
 
 class StubRepository : TodoItemRepository {
     var getDoneItems_return_value: List<TodoItem> = emptyList()
     var getTodoItems_return_value: List<TodoItem> = emptyList()
+    var getTodoItemById_return_value: List<TodoItem> = emptyList()
     override fun saveTodoItem(todoItem: TodoItem) {
 
     }
@@ -90,6 +104,10 @@ class StubRepository : TodoItemRepository {
 
     override fun updateTodoItem(id: Int, name: String, done: Boolean) {
         TODO("Not yet implemented")
+    }
+
+    override fun getTodoItemById(id: Int) :List<TodoItem> {
+        return getTodoItemById_return_value
     }
 
 }
@@ -125,5 +143,9 @@ class SpyTodoRepository : TodoItemRepository {
         updateTodoItem_param_name = name
         updateTodoItem_param_done = done
         updateTodoItem_was_called = true
+    }
+
+    override fun getTodoItemById(id: Int): List<TodoItem> {
+        TODO("Not yet implemented")
     }
 }
