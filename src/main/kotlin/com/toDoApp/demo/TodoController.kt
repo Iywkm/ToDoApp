@@ -1,10 +1,6 @@
 package com.toDoApp.demo
 
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class TodoController(val todoService: TodoResource) {
@@ -26,6 +22,11 @@ class TodoController(val todoService: TodoResource) {
     @DeleteMapping("/complete")
     fun deleteDoneItems() {
         todoService.deleteDoneItems()
+    }
+
+    @PatchMapping("/todo")
+    fun updateTodoItem(@RequestParam id: String, name: String, done: String) {
+        todoService.updateTodoItem(id.toInt(), name, done.toBoolean())
     }
 }
 

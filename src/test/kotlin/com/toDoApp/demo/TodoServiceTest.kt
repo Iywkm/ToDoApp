@@ -57,6 +57,17 @@ class TodoServiceTest {
         assertThat(spyRepo.deleteDoneItem_was_called, equalTo(true))
     }
 
+    @Test
+    fun `updateTodoItems will update items`() {
+        val spyRepo = SpyTodoRepository()
+        val service = TodoService(spyRepo)
+        service.updateTodoItem(1,"shopping", false)
+        assertThat(spyRepo.updateTodoItem_was_called, equalTo(true))
+        assertThat(spyRepo.updateTodoItem_param_id, equalTo(1))
+        assertThat(spyRepo.updateTodoItem_param_name, equalTo("shopping"))
+        assertThat(spyRepo.updateTodoItem_param_done, equalTo(false))
+    }
+
 }
 
 class StubRepository : TodoItemRepository {
@@ -77,12 +88,20 @@ class StubRepository : TodoItemRepository {
     override fun deleteDoneItems() {
     }
 
+    override fun updateTodoItem(id: Int, name: String, done: Boolean) {
+        TODO("Not yet implemented")
+    }
+
 }
 
 class SpyTodoRepository : TodoItemRepository {
     var saveTodoItem_todoItem: TodoItem = TodoItem("")
     var saveTodoItem_was_called = false
     var deleteDoneItem_was_called = false
+    var updateTodoItem_was_called = false
+    var updateTodoItem_param_id: Int? = null
+    var updateTodoItem_param_name: String? = null
+    var updateTodoItem_param_done: Boolean? = null
 
     override fun saveTodoItem(todoItem: TodoItem) {
         saveTodoItem_todoItem = todoItem
@@ -99,5 +118,12 @@ class SpyTodoRepository : TodoItemRepository {
 
     override fun deleteDoneItems() {
         deleteDoneItem_was_called = true
+    }
+
+    override fun updateTodoItem(id:Int, name:String, done: Boolean) {
+        updateTodoItem_param_id = id
+        updateTodoItem_param_name = name
+        updateTodoItem_param_done = done
+        updateTodoItem_was_called = true
     }
 }

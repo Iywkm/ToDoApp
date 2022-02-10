@@ -8,4 +8,6 @@ interface TodoItemRepository {
     fun getDoneItems(): List<TodoItem>
 
     fun deleteDoneItems()
+
+    fun updateTodoItem(id:Int, name:String, done:Boolean)
 }

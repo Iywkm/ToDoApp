@@ -32,4 +32,9 @@ class DBTodoItemRepository(val jdbcTemplate: JdbcTemplate): TodoItemRepository {
         val sql = "delete from todo where done = true"
         jdbcTemplate.update(sql)
     }
+
+    override fun updateTodoItem(id: Int, name: String, done: Boolean) {
+        val sql = "update todo set name = ? , done = ? where id = ?"
+        jdbcTemplate.update(sql, name, done, id)
+    }
 }
