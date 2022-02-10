@@ -19,6 +19,10 @@ class TodoService(val todoRepository: TodoItemRepository): TodoResource {
     override fun deleteDoneItems() {
         todoRepository.deleteDoneItems()
     }
+
+    override fun updateTodoItem(id: Int, name: String, done: Boolean) {
+        todoRepository.updateTodoItem(id, name, done)
+    }
 }
 
 interface TodoResource {
@@ -26,4 +30,5 @@ interface TodoResource {
     fun getTodoItems(): List<TodoItem>
     fun getDoneItems(): List<TodoItem>
     fun deleteDoneItems()
+    fun updateTodoItem(id: Int, name: String, done: Boolean)
 }

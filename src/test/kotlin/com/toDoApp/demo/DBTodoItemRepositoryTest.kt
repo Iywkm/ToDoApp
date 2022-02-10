@@ -26,8 +26,10 @@ class DBTodoItemRepositoryTest {
     @BeforeEach
     fun setup() {
         repo = DBTodoItemRepository(jdbcTemplate)
-        val sql = "DELETE FROM todo"
-        jdbcTemplate.update(sql)
+        val sql1 = "DELETE FROM todo"
+        val sql2 = "alter table todo alter column id restart with 1"
+        jdbcTemplate.update(sql1)
+        jdbcTemplate.update(sql2)
     }
 
     @Test
@@ -75,6 +77,19 @@ class DBTodoItemRepositoryTest {
         assertThat(dBTodoItemsList[0].name, equalTo("wake up 7 am"))
         assertThat(dBTodoItemsList.size, equalTo(1))
 
+    }
+
+    @Test
+    fun `updateTodoItem will update todo item`() {
+        var sql = "insert into todo(name, done) values(?,?)"
+        jdbcTemplate.update(sql,  "shopping", false)
+
+        repo.updateTodoItem(1, "running", true)
+
+        sql = "select * from todo"
+        val dBTodoItemsList: List<TodoItem> = jdbcTemplate.query(sql, rowMapper)
+        assertThat(dBTodoItemsList[0].name, equalTo("running"))
+        assertThat(dBTodoItemsList[0].done, equalTo(true))
     }
 
 }

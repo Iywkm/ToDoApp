@@ -84,12 +84,34 @@ class TodoControllerTest {
         assertThat(spyService.deleteTodoItems_was_called, equalTo(true))
     }
 
+    @Test
+    fun `updateTodoItem succeeds and returns status 200`() {
+        setupWithSpyService()
+
+        mockMvc.perform(
+            patch("/todo")
+                .param("id", "1")
+                .param("name", "go home")
+                .param("done", "true")
+        )
+            .andExpect(status().isOk)
+
+        assertThat(spyService.updateTodoItem_was_called, equalTo(true))
+        assertThat(spyService.updateTodoItem_param_id, equalTo(1))
+        assertThat(spyService.updateTodoItem_param_name, equalTo("go home"))
+        assertThat(spyService.updateTodoItem_param_done, equalTo(true))
+    }
+
 }
 
 class SpyService : TodoResource {
     var createTodoItem_todoItem: TodoItem = TodoItem("")
+    var updateTodoItem_param_id: Int? = null
+    var updateTodoItem_param_name: String? = null
+    var updateTodoItem_param_done: Boolean? = null
     var createTodoItem_was_called = false
     var deleteTodoItems_was_called = false
+    var updateTodoItem_was_called = false
 
     override fun createTodoItem(todoItem: TodoItem) {
         createTodoItem_todoItem = todoItem
@@ -106,6 +128,14 @@ class SpyService : TodoResource {
 
     override fun deleteDoneItems() {
         deleteTodoItems_was_called = true
+    }
+
+    override fun updateTodoItem(id: Int, name: String, done: Boolean) {
+        updateTodoItem_param_id = id
+        updateTodoItem_param_name = name
+        updateTodoItem_param_done = done
+        updateTodoItem_was_called = true
+
     }
 }
 
@@ -126,6 +156,8 @@ class StubService : TodoResource {
     }
 
     override fun deleteDoneItems() {
+    }
 
+    override fun updateTodoItem(id: Int, name: String, done: Boolean) {
     }
 }
